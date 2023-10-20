@@ -1,5 +1,6 @@
 int txPin = 2; // Pino de transmissão (TX)
 int baudRate = 9600; // Velocidade de transmissão
+int rodar = 0;
 
 void setup() {
   pinMode(txPin, OUTPUT);
@@ -7,10 +8,14 @@ void setup() {
 }
 
 void loop() {
-  char characterToSend = 'A'; // Caractere a ser transmitido
-  sendUARTChar(characterToSend);
-  Serial.print("Bit enviado");
-  delay(1000); // Espera 1 segundo antes de enviar o próximo caractere
+  if(rodar < 10){
+    char characterToSend = 'A'; // Caractere a ser transmitido
+    sendUARTChar(characterToSend);
+    Serial.println("Bit enviado");
+    delay(1000); // Espera 1 segundo antes de enviar o próximo caractere
+  } else {
+    return 0;
+  }
 }
 
 // character >> i = character[i]
@@ -37,4 +42,6 @@ void sendUARTChar(char character) {
 
   digitalWrite(txPin, HIGH); // stop bit (HIGH)
   delayMicroseconds(1000000 / baudRate); // Aguarda o tempo de parada
+
+  rodar++;
 }
