@@ -5,12 +5,13 @@ int paridade;
 void setup() {
   pinMode(txPin, OUTPUT);
   Serial.begin(baudRate);
+  digitalWrite(txPin, HIGH);
 }
 
 void loop() {
   char characterToSend = "A";
   Serial.print("Transmição Iniciada!");
-  digitalWrite(txPin, HIGH);
+  digitalWrite(txPin, LOW);
   myClock(1666);
   for (int i = 0; i < 8; i++) {
     digitalWrite(txPin, characterToSend >> i & 1);

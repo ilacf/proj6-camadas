@@ -3,7 +3,7 @@ int baudRate = 9600; // Velocidade de transmissão
 int paridade;
 int checkParidade;
 char recebido;
-bool comecou = false;
+bool esperando = true;
 
 void setup() {
   pinMode(rxPin, INPUT);
@@ -12,8 +12,8 @@ void setup() {
 
 void loop() {
   Serial.print("Servidor Iniciado!");
-  while (!comecou) {
-    comecou = digitalRead(rxPin);
+  while (esperando) {
+    esperando = digitalRead(rxPin);
   }
   Serial.println("Recebendo Transmição...");
   myClock(2500);
