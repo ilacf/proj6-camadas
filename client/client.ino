@@ -8,6 +8,7 @@ void setup() {
 }
 
 void loop() {
+  char characterToSend = "A";
   Serial.print("Transmição Iniciada!");
   digitalWrite(txPin, HIGH);
   myClock(1666);

@@ -3,7 +3,7 @@ int baudRate = 9600; // Velocidade de transmissão
 int paridade;
 int checkParidade;
 char recebido;
-bool comecou == false;
+bool comecou = false;
 
 void setup() {
   pinMode(rxPin, INPUT);
