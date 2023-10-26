@@ -3,22 +3,23 @@ int baudRate = 9600; // Velocidade de transmissão
 int paridade;
 int checkParidade;
 char recebido;
-bool esperando = true;
+bool esperando;
 
 void setup() {
-  pinMode(rxPin, INPUT);
   Serial.begin(baudRate);
+  pinMode(rxPin, INPUT);
 }
 
 void loop() {
+  esperando = true;
   Serial.print("Servidor Iniciado!");
   while (esperando) {
-    esperando = digitalRead(rxPin);
+    esperando = digitalRead(rxPin); // Espera start bit
   }
   Serial.println("Recebendo Transmição...");
   myClock(2500);
   for (int i = 0; i < 8; i++) {
-    recebido |= digitalRead(rxPin) << 1;
+    recebido |= digitalRead(rxPin) << i;
     myClock(1666);
   }
   paridade = digitalRead(rxPin);
@@ -33,16 +34,16 @@ void loop() {
   Serial.print(checkParidade);
 
   if ((checkParidade % 2 != 0 & paridade == 1) || (checkParidade % 2 == 0 & paridade == 0)) {
-    Serial.println("Transmissão Concluida!");
+    Serial.println(" Transmissão Concluida!");
   } else {
-    Serial.println("ERRO!");
+    Serial.println(" ERRO!");
   }
   Serial.println(recebido);
-  myClock(1666666);
+  myClock(1666*1666);
 }
 
 void myClock(int clock) {
-  for (int i = 0; i < clock*1000000 ;i++){
+  for (int i = 0; i < clock ; i++){
       asm("NOP");
     }
 }
