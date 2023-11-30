@@ -1,26 +1,36 @@
 int rxPin = 3; // Pino de recepção (RX)
 int baudRate = 9600; // Velocidade de transmissão
+
+int i;
 int paridade;
 int checkParidade;
+
 char recebido;
 bool esperando;
+bool final = true;
 
 void setup() {
   Serial.begin(baudRate);
   pinMode(rxPin, INPUT);
+  Serial.println("Servidor Iniciado!");
 }
 
 void loop() {
   esperando = true;
-  Serial.print("Servidor Iniciado!");
   while (esperando) {
     esperando = digitalRead(rxPin); // Espera start bit
   }
-  Serial.println("Recebendo Transmição...");
-  myClock(2500);
-  for (int i = 0; i < 8; i++) {
+  Serial.println("Recebendo Transmissão...");
+  for (int i = 0; i < 2500 ; i++){
+      asm("NOP");
+    }
+  i = 0;
+  while (i < 8) {
     recebido |= digitalRead(rxPin) << i;
-    myClock(1666);
+    for (int i = 0; i < 1666 ; i++){
+      asm("NOP");
+    }
+    i += 1;
   }
   paridade = digitalRead(rxPin);
   for (int i = 0; i < 8; i++) {
@@ -28,22 +38,17 @@ void loop() {
       checkParidade += 1;
     }
   }
+
   Serial.print("Bit de Paridade é: ");
-  Serial.print(paridade);
+  Serial.println(paridade);
   Serial.print("Quantidade de 1 foi: ");
-  Serial.print(checkParidade);
+  Serial.println(checkParidade);
 
-  if ((checkParidade % 2 != 0 & paridade == 1) || (checkParidade % 2 == 0 & paridade == 0)) {
-    Serial.println(" Transmissão Concluida!");
-  } else {
-    Serial.println(" ERRO!");
-  }
+  Serial.print("Caractere recebido foi: ");
   Serial.println(recebido);
-  myClock(1666*1666);
-}
-
-void myClock(int clock) {
-  for (int i = 0; i < clock ; i++){
+  while (final) {
+    for (int i = 0; i < 16000000000000  ; i++){
       asm("NOP");
     }
+  }
 }
